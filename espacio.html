@@ -1,0 +1,356 @@
+<html></html>
+    <head>
+        <meta charset="UTF-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>el spot</title>
+        <!-- icono del la pestaña -->
+        <link rel="shortcut icon" href="./Recursos/imagenes/aeroturbina.ico">
+        <!-- link de la libreria para leer las etiquetas de aframe -->
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+          <!-- scripts para enviroments-->
+        <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+        <!-- script para gifs -->
+        <script src="https://rawgit.com/mayognaise/aframe-gif-shader/master/dist/aframe-gif-shader.min.js"></script>
+        <script src="https://rawgit.com/mayognaise/aframe-gif-component/master/dist/aframe-gif-component.min.js"></script>
+        <!-- para leer animación -->
+        <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+        <!-- script para texturas -->
+        <script src="https://cdn.jsdelivr.net/npm/aframe-enviropacks@latest/aframe-enviropacks.js"></script>
+        <!-- script para texto en 3d -->
+        <script
+            src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script>
+        <!-- script para interacciones -->
+        <script src="https://unpkg.com/aframe-event-set-component@3.0.3/dist/aframe-event-set-component.min.js"></script>
+        <!-- LIBRERIAS DE COLISIONES Y FÍSICAS-->
+        <script
+            src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
+        <script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>
+        <!-- scripts movimiento de la cámara -->
+        <script> src = "https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js" </script>
+        <script> src = "https://unpkg.com/super-hands@2.0.2/dist/super-hands.min.js" </script>
+        <!-- scripts para partículas-->
+        <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
+        <script
+            src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-extras.ocean@%5E3.5.x/dist/aframe-extras.ocean.min.js"></script>
+        <script src="https://unpkg.com/aframe-gradient-sky@1.2.0/dist/gradientsky.min.js"></script>
+        <!-- scipts para animacion de agua -->
+        <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
+        <script src="https://unpkg.com/aframe-extras.ocean@%5E3.5.x/dist/aframe-extras.ocean.min.js"></script>
+        <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
+        <!-- scripts para truco de transparencia en modelos 3d-->
+        <script>
+            AFRAME.registerComponent('model-opacity', {
+                schema: { default: 1.0 },
+                init: function () {
+                    // this.el.addEventListener('model-loaded', this.update.bind(this));
+                    this.el.addEventListener("model-loaded", () => {
+                        const object3DEl = this.el.object3DMap;
+                        ;
+   
+
+   
+   
+                        var mesh = this.el.getObject3D('mesh'); // For hand, the result is undefined
+                        // var mesh = this.el.object3DMap.mesh; // For hand, the result is undefined
+                        console.log(mesh);
+                        var data = this.data;
+                        if (!mesh) { return; }
+                        mesh.traverse(function (node) {
+                            if (node.isMesh) {
+                                ;
+                                node.material.opacity = data;
+                                node.material.transparent = data < 1.0;
+                                node.material.needsUpdate = true;
+                            }
+                        });
+                    }, 2000)
+   
+   
+                },
+                update: function () {
+                    var mesh = this.el.getObject3D('mesh');
+                    var data = this.data;
+                    if (!mesh) { return; }
+                    mesh.traverse(function (node) {
+                        if (node.isMesh) {
+                            ;
+                            node.material.opacity = data;
+                            node.material.transparent = data < 1.0;
+                            node.material.needsUpdate = true;
+                        }
+                    });
+                }
+            });
+        </script>
+   
+    </head>
+  <body>
+
+
+    <a-assets>
+        <!-- Imagenes -->
+        <img id="cielo" src="./Recursos/imagenes/cielo.jpg">
+
+        <!-- Modelos -->
+        <a-asset-item id="turbina" src="./Recursos/modelos/turbina.gltf"></a-asset-item> 
+        <a-asset-item id="palmera" src="./Recursos/modelos/palmeras.gltf"></a-asset-item> 
+        <a-asset-item id="body" src="./Recursos/modelos/body.glb"></a-asset-item>   
+
+        </a-assets>
+
+    <a-scene loading-screen="dotsColor:white; backgroundColor:black" physics="gravity:-50; debug: false" vr-mode-ui="enabled:false">
+
+    <!-- Enviroment  https://github.com/supermedium/aframe-environment-component -->
+        <a-entity environment="preset:default; skyType:gradient; lighting:none; shadow:true; shadowSize:10; fog:0.30; playArea:1; stageSize:200; ground:canyon; groundTexture:none; groundColor:#f2dd9e; groundColor2:#000000; dressing:none; grid:none"></a-entity>
+
+     <!-- CIELO -->
+        <a-sphere radius="190" material="src: #cielo; side: double;" animation="property:rotation; to: 0 360 0; loop:true; dur:250000"></a-sphere>  
+        
+        
+
+    <!-- PISO INVISIBLE -->
+        <a-plane static-body position="0 0.030 1" rotation="-90 0 0" color="#64c2ff" scale="2000 2000" opacity="0.000"></a-plane>
+ 
+
+    <!-- OCEANO -->
+        <a-entity id="ocean" ocean="density:40; speed:1.200" position="0 0.700 0" scale="50 50" material="color:#64c2ff; opacity: 0.40; metalness: 0; roughness: 0,20" rotation="-90 0 0"  animation__position="property:position; to: 0 1.800 0; loop:true; dur:50000; easing: linear; dir:alternate"></a-entity>
+
+
+    <!-- CAMARA  -->     
+        <a-entity movement-controls kinematic-body>
+        <a-entity id="camera" camera position="0 2.5 0" look-controls light="intensity:0.40; type:spot; penumbra:1; distance:10; angle:90">
+
+        <a-entity cursor="fuse: true; fuseTimeout: 500" position="0 0 -1" geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.023" material="color:#dfcece; shader: flat"> </a-entity>      
+          </a-entity>
+                </a-entity>
+
+
+    <!-- LUCES -->
+        <a-entity light="type: ambient; color: #BBB"></a-entity>
+        <a-entity light="type: directional; color: #9edcf0; intensity: 0.8" position="0 80 200"></a-entity>
+ 
+    
+
+    <!-- AEROTURBINAS -->
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="40 0 178" rotation="0 90 0" scale="1" animation__position="loop:true; dur:300; easing: linear" ></a-entity>
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="-21.90 1.330 69" rotation="0 55 0" scale="1" animation__position="loop:true; dur:300; easing: easeInBack"></a-entity>
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="75.80 1.373 100" rotation="0 108 0" scale="1" animation__position="loop:true; dur:300; easing: easeOutExpo"></a-entity>
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="153.70 -3.85 100" rotation="0 143 0" scale="1" animation__position="loop:true; dur:300; easing: linear"></a-entity>
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="97 0 26.54" rotation="0 160 0" scale="1" animation__position="loop:true; dur:300; easing: easeOutElastic"></a-entity>
+
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="142.60 -5.22 -104,40" rotation="0 -90 0" scale="1" animation__position="loop:true; dur:3000; easing: easeInOutExpo"></a-entity>
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="112 -7,33 -139" rotation="0 -90 0" scale="1" animation__position="loop:true; dur:3000; easing: linear"></a-entity>
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="55,16 1,992 -90,25" rotation="0 -90 0" scale="1" animation__position="loop:true; dur:3000; easing: easeOutCirc"></a-entity>
+
+
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="-17,13 -9,60 -162,15" rotation="0 -90 0" scale="1" animation="loop:true; dur:3000; easing: easeOutElastic"></a-entity>
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="-91,60 1,628 -56,80" rotation="0 -20 0" scale="1" animation__position="loop:true; dur:3000; easing: linear"></a-entity>
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="-144 -10,96 -15,40" rotation="0 -20 0" scale="1" animation__position="loop:true; dur:3000; easing: easeInOutCirc"></a-entity>
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="-89,80 1,537 15,20" rotation="0 10 0" scale="1" animation__position="loop:true; dur:3000; easing: linear"></a-entity>
+
+        <a-entity static-body gltf-model="#turbina" animation-mixer position="-144 -5,22 95,60" rotation="0 0 0" scale="1" animation__position="loop:true; dur:3000; easing: easeInOutBounce"></a-entity>
+
+    <!-- LIMITES -->
+        <a-box static-body position="100 4 -16" color="#0fd2f9" opacity="0.010" scale="8 250 0.090" rotation="0 90 90"></a-box>
+        <a-box static-body position="-100 4 -16" color="#0fd2f9" opacity="0.010" scale="8 250 0.090" rotation="0 90 90"></a-box>
+        <a-box static-body position="0 4 100" color="#0fd2f9" opacity="0.010" scale="8 250 0.090" rotation="0 0 90"></a-box>
+        <a-box static-body position="0 4 -100" color="#0fd2f9" opacity="0.010" scale="8 250 0.090" rotation="0 0 90"></a-box>
+
+    <!-- LLAMANDO GIFS -->
+       <a-entity position="9.090 11 -20.12" rotation="20 -30 0" scale="3 3" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWxwNHY5ZW8wMTZ3MTNvanliemNsMDYxNnczZmo4aDRzeWw2ZzNneCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUySTScC3IO89TqRDW/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+       <a-entity position="-19 12 -42" rotation="20 30 0" scale="3 3" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXV2cjZ2YWg0bnEzNmR2YzFiaDc2bGVxdGdtcGI4MjE0MmNxdDR6dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ofT5Y3p3VEX5Ko0jC/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+       <a-entity position="-48 12.50 -49" rotation="20 60 0" scale="2 2" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2lubGo2OXA4aWw0ZDZnb2oycWR1MnQ3ejdzNHNxd2dsODN0dHJ5aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ofT5P2pMngFkp2yKk/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+       <a-entity position="-34 9 -22" rotation="20 40 0" scale="3 3" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHR3bGlrMmY1NG1naWxlNzBwZWExejBpdGk2dWhrbHk5emJ1azIyayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0ErJCNwgim23XqVO/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+        <a-entity position="-89 13 -29" rotation="20 90 0" scale="3 3" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExa3h2bGpjc3BqM25ueHF4NnF0azZweGJmOG1laXB1dHF2MGRnYmd5eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xUySTxCUWdEJCB7l8A/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+        <a-entity position="-91 9 -4.77" rotation="20 120 0" scale="2 2" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbG9hdHNidnpxb3prcjZ1b3lqcDAzNjVzMDRqemN4Mnoya2R5M2E5ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vsfhuv9jl8TQs/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+        <a-entity position="-70 12 25" rotation="20 70 0" scale="3 3" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHZkazhnd295ZXcweHFiaTY4azI3dHF2M3dtZDgxNTY2YjFqYW90eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/eLlDXNkcQq91K/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+        <a-entity position="-48 13 66.59" rotation="-20 -35 0" scale="3 3" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExenhicGJpc3V2ODNhNDF4N29wOGtsaW5teDhieWdxdGV5dXI1cGxqYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jPgEkqIWTmYLK/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+       <a-entity position="12.18 10.34 75" rotation="-20 30 0" scale="2.5 2.5" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExemVxeXlybHVvejh6aG80MmZpdWZyemJpNWFnbWkzOWRpcTZnMHJ6YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fPzHQIBWjiJMc/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+       <a-entity position="-8 7 30" rotation="-20 -40 0" scale="2 2" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXV2cjZ2YWg0bnEzNmR2YzFiaDc2bGVxdGdtcGI4MjE0MmNxdDR6dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ofT5Y3p3VEX5Ko0jC/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+        <a-entity position="26 9 21.49" rotation="-20 90 0"  scale="2 2" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjR1MTBpYzhybm53NjF6ZHVuc3QxeWhwYmEzaW05c3lkcmFsanVzOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3orife2Tgsu2WJR1HG/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+        <a-entity position="13 9 33" rotation="-20 60 0" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExamZnNGg2a3ZnZ2R6eWVuYXUydHQxc3NlMmdwaGdvd3YxMzEydG5zNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT5LMrcaQaGebjZwWc/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+        <a-entity position="88 11 62" rotation="-20 80 0" scale="3 3" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGR5eXIxOWIxbWptNXJrb3k2MzV6emNvaGZqM3VrdGJuNnUwNG5tZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o6MbaTXCxFETjGXiU/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+        <a-entity position="68 13 44" rotation="20 30 0"  scale="3 3" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExa2R6bTM3ZXVvZWtrdnJ2cmoxdWo3OGJiYzR6MjQwcDR0dDRhaHV0MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ymEwB53OAJWOA/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+       <a-entity position="-12.50 8 38" rotation="-20 -30 0" scale="2 2" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3FmdmVwaWdndXQ4eWl5a3ViNzdwaXdhaDR5MjhwOWltazdrMnR2cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4oZpTY30l6XtK/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+        <a-entity position="0.275 5 -39" rotation="20 30 0" geometry="primitive:plane; width:4; height:4;" material="shader:gif; src: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGtkajlkZmd5OHJ3a2FoZ3YzN2E4M2R1YjJicDN3Y3JwZDdqdGZzbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Q01GUoj9c5S80/giphy.gif) repeat:2 2; transparent: true; alphaTest: 0.5; side:double"></a-entity>
+
+<!-- ESPACIO -->
+<!-- escalera 1 -->
+    <a-box static-body position="45 0.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="46 1 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="47 1.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="48 2 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="49 2.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="50 3 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="51 3.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="52 4 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="53 4.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="54 5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="55 5.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="56 6 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="57 6.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="58 7 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="59 7.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="60 8 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="61 8.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="62 9 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="63 9.5 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="64 10 -6" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+
+    <a-box static-body position="66.5 10.5 -4.35" scale="6.560 0.200 4" rotation="0 90 0" color="white" opacity="1"></a-box>
+
+    <a-box static-body position="66.5 11 -8.3" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 11.5 -9.3" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 12 -10.3" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 12.5 -11.3" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 13 -12.3" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 13.5 -13.3" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 14 -14.3" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+
+    <a-box static-body position="66.5 14.5 -21.9" scale="3.280 0.200 14" rotation="0 0 0" color="0fd2f9" opacity="0.40"></a-box>
+
+    <a-box static-body position="66.5 15 -29.5" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 15.5 -30.5" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 16 -31.5" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 16.5 -32.5" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 17 -33.5" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 17.5 -34.5" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="66.5 18 -35.5" scale="3.280 0.200 1,5" rotation="0 0 0" color="white" opacity="1"></a-box>
+
+    <a-box static-body position="66.5 18.5 -45" scale="3.280 0.200 18" rotation="0 0 0" color="0fd2f9" opacity="0"></a-box>
+
+<!-- escalera parte 2-->
+<a-box static-body position="66.50 11 -0.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 11.50 0.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 12 1.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 12.50 2.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 13 3.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 13.50 4.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 14 5.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 14.50 6.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 15 7.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 15.50 8.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 16 9.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 16.50 10.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 17 11.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 17.50 12.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 18 13.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 18.50 14.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 19 15.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 19.50 16.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 20 17.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 20.50 18.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 21 19.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 21.50 20.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 22 21.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="66.50 22.50 22.50" scale="3.280 0.200 1.5" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+
+<a-box static-body position="66.5 23 32.50" scale="3.280 0.200 18" rotation="0 0 0" color="0fd2f9" opacity="0.40"></a-box>
+<a-box static-body position="48.20 23 43.20" scale="3.280 0.200 40" rotation="0 90 0" color="0fd2f9" opacity="0.40"></a-box>
+
+<a-box static-body position="27.5 22.5 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="26.5 22 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="25.5 21.5 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="24.5 21 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="23.5 20.5 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="22.5 20 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="21.5 19.5 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="20.5 19 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+d
+<a-box static-body position="19.5 18.5 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="18.5 18 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="17.5 17.5 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="16.5 17 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="15.5 16.5 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="14.5 16 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="13.5 15.5 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="12.5 15 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="11.5 14.5 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+<a-box static-body position="10.5 14 43.2" scale="3.280 0.200 1.5" rotation="0 90 0" color="0fd2f9" opacity="1"></a-box>
+
+<a-box static-body position="-20 13.5 43.20" scale="3.280 0.200 60" rotation="0 90 0" color="0fd2f9" opacity="0.40"></a-box>
+<a-box static-body position="-51.6 13.5 14.82" scale="3.280 0.200 60" rotation="0 0 0" color="0fd2f9" opacity="0.40"></a-box>
+
+<!-- espacio flotante -->
+    <a-box static-body position="66.5 19 -64" scale="20 0.200 20" rotation="0 0 0" color="0fd2f9" opacity="1"></a-box>
+
+    <a-entity static-body gltf-model="#palmera" animation-mixer position="62 18.94 -70" rotation="0 0 0" scale="1"></a-entity>
+    <a-entity static-body gltf-model="#body" animation-mixer position="71.83 19.07 -68.72" rotation="0 -45 0" scale="2 2 2"></a-entity>
+
+    <a-entity geometry="primitive:torus" rotation="0 45 0" position="70.14 26.17 -67.16" scale=".5 .5 .5" material="color:black" animation__mouseenter="property: components.material.material.color; type: color; to:#87d9dd; startEvents: mouseenter; dur: 500" animation__mouseleave="property: components.material.material.color; type: color; to: black; startEvents: mouseleave; dur: 800"
+    animation="property: rotation; to: 0 360 0; loop:true; dur:8000; easing: easeInOutCirc" link="href: index.html"></a-entity>
+
+ <!--  <a-entity text-geometry="value: un acto de fe; size: 2; letterSpacing:10; bevelEnabled: true; bevelSize: 1.150; curveSegments: 15"
+    enviropack-material="material: plastic; displacementMap: false" rotation="0 0 0"
+    position="65.5 21,5 -39" scale="0.050 0.050 0.005"  animation="property: material.opacity; to: 0; dur: 2000; dir: alternate; loop: true"></a-entity>
+--> 
+    
+<!-- escalera arriba -->
+    <a-box static-body position="64 11 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="63 11.5 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="62 12 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="61 12.5 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="60 13 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="59 13.5 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="58 14 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="57 14.5 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="56 15 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="55 15.5 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="54 16 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="53 16.5 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="52 17 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="51 17.5 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="50 18 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="49 18.5 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="48 19 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="47 19.5 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+    <a-box static-body position="46 20 -2.7" scale="3.280 0.200 1,5" rotation="0 90 0" color="white" opacity="1"></a-box>
+
+    <a-box static-body position="20.5 20.5 -2.7" scale="3.280 0.200 50" rotation="0 90 0" color="0fd2f9" opacity="0.40"></a-box>
+
+    <a-entity text-geometry="value: DO NOT JUMP; size: 8; letterSpacing:5; bevelEnabled: true; bevelSize: 1.150; curveSegments: 15"
+    enviropack-material="material: plastic; displacementMap: false" rotation="0 90 0"
+    position="-10.40 24.74 0.815" scale="0.100 0.100 0.005"  animation="property: material.opacity; to: 0; dur: 2000; dir: alternate; loop: true"></a-entity>
+
+
+    </a-scene>
+
+  </body>
+</html>
+
+
+<!-- voxels.com -->
+
+<!-- Consulta de descarga de recursos:
+- https://sketchfab.com/feed
+- https://market.pmnd.rs/
+- https://nasa3d.arc.nasa.gov/
+- https://www.cgtrader.com/
+- https://www.craftsmanspace.com/
+- https://archive3d.net/
+- https://clara.io/library
+- https://www.turbosquid.com/
+- mixamo.com
+- https://giphy.com/
+- https://polyhaven.com/
+- https://freesound.org/
+- https://pixabay.com/music/search/experimental/
+-->
